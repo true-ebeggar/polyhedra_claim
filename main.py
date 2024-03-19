@@ -27,19 +27,19 @@ def gas_gate(w3):
                                 f"\n{e}")
             time.sleep(1)
 
+
 def process_keys():
     try:
         with open('private_keys.txt', 'r') as file:
             private_keys = file.read().splitlines()
-
     except FileNotFoundError:
         logger.warning("File 'private_keys.txt' not found")
         sys.exit(1)
 
-    if SHUFLE:
+    if SHUFFLE:
         random.shuffle(private_keys)
-    success_keys = []
-    fail_keys = []
+
+    success_keys, fail_keys = [], []
 
     for key in private_keys:
         m = Manager(key)
@@ -51,33 +51,19 @@ def process_keys():
             success_keys.append(key)
         else:
             fail_keys.append(key)
-        with open('private_keys.txt', 'w') as file:
-            for key in private_keys:
-                if key not in success_keys and key not in fail_keys:
-                    file.write(key + '\n')
 
-        try:
-            with open('success_keys.txt', 'a') as file:
-                for key in success_keys:
-                    file.write(key + '\n')
-        except FileNotFoundError:
-            logger.warning("File 'success_keys.txt' not found. Creating a new file.")
-            with open('success_keys.txt', 'w') as file:
-                for key in success_keys:
-                    file.write(key + '\n')
+        with open('success_keys.txt', 'a') as file:
+            for key in set(success_keys):
+                file.write(key + '\n')
 
-        try:
-            with open('fail_keys.txt', 'a') as file:
-                for key in fail_keys:
-                    file.write(key + '\n')
-        except FileNotFoundError:
-            logger.warning("File 'fail_keys.txt' not found. Creating a new file.")
-            with open('fail_keys.txt', 'w') as file:
-                for key in fail_keys:
-                    file.write(key + '\n')
+        with open('fail_keys.txt', 'a') as file:
+            for key in set(fail_keys):
+                file.write(key + '\n')
+
         t = random.randint(sleep_min, sleep_max)
-        logger.info(f"Process will hold for {t}-sec")
+        logger.info(f"Process will hold for {t} seconds")
         time.sleep(t)
+
 
 if __name__ == "__main__":
     process_keys()
