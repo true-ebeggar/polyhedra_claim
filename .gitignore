@@ -1,0 +1,4 @@
+
+*.txt
+__pycache__/config.cpython-311.pyc
+__pycache__/staff.cpython-311.pyc
