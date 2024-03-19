@@ -5,14 +5,12 @@ import requests
 from web3 import Web3, HTTPProvider
 from eth_account import Account
 from loguru import logger
-
-gas_lim_min, gas_lim_max = 85000, 100000
-
+from config import *
 
 class Manager:
     def __init__(self, key):
         self.private_key = key
-        self.w3 = Web3(HTTPProvider('https://eth.llamarpc.com'))
+        self.w3 = Web3(HTTPProvider(NODE))
         self.account = Account.from_key(key)
         self.address = self.account.address
 
